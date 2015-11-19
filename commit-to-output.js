@@ -30,7 +30,7 @@ function toStringSimple (data) {
 
 function toStringMarkdown (data) {
   var s = ''
-  s += '* [[`' + data.sha.substr(0, 10) + '`](' + data.shaUrl + ')] - '
+  s += '* [[' + data.sha.substr(0, 10) + '](' + data.shaUrl + ')] - '
   s += (data.semver || []).length ? '**(' + data.semver.join(', ').toUpperCase() + ')** ' : ''
   s += data.revert ? '***Revert*** "' : ''
   s += data.group ? '**' + data.group + '**: ' : ''
@@ -47,14 +47,14 @@ function toStringMarkdown (data) {
 }
 
 
-function commitToOutput (commit, simple, ghId) {
+function commitToOutput (commit, simple, ghId, baseurl) {
   var data        = {}
     , prUrlMatch  = commit.prUrl && commit.prUrl.match(/^https?:\/\/.+\/([^\/]+\/[^\/]+)\/\w+\/\d+$/i)
     , urlHash     = '#'+commit.ghIssue || commit.prUrl
     , ghUrl       = ghId.user + '/' + ghId.name
 
   data.sha     = commit.sha
-  data.shaUrl  = 'https://github.com/' + ghUrl + '/commit/' + commit.sha.substr(0,10)
+  data.shaUrl  = baseurl + ghUrl + '/commit/' + commit.sha.substr(0,10)
   data.semver  = commit.labels && commit.labels.filter(function (l) { return l.indexOf('semver') > -1 }) || false
   data.revert  = reverts.isRevert(commit.summary)
   data.group   = groups.toGroups(commit.summary)

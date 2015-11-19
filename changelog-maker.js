@@ -17,6 +17,7 @@ const spawn          = require('child_process').spawn
 
     , quiet          = argv.quiet || argv.q
     , simple         = argv.simple || argv.s
+    , baseurl         = argv.baseurl || 'https://gitlab.com/'
 
     , pkg            = require('./package.json')
     , debug          = require('debug')(pkg.name)
@@ -94,7 +95,7 @@ function onCommitList (err, list) {
       list = groupCommits(list)
 
     list = list.map(function (commit) {
-      return commitToOutput(commit, simple, ghId)
+      return commitToOutput(commit, simple, ghId, baseurl)
     })
 
     if (!quiet)
